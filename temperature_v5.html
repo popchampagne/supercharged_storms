@@ -1,0 +1,791 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Supercharged: Earth's Rising Heat & Cyclonic Storms</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .chart-box { position: relative; width: 100%; height: 350px; }
+    .map-hotspot:hover circle:first-child { transform: scale(1.4); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen antialiased selection:bg-rose-500 selection:text-white">
+
+  <!-- Header / Hero Section -->
+  <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-rose-500/20">
+          <i class="fa-solid fa-hurricane text-xl text-white"></i>
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-widest font-bold text-rose-400">Earth Science Special Investigation</span>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">Supercharged Storms</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          25-Year Dataset (1999–2024)
+        </span>
+        <span class="text-xs text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-lg border border-slate-700">High School Science Lab</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+    <!-- Big Idea Callout -->
+    <section class="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/40 p-6 sm:p-8 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-3xl">
+        <span class="text-xs font-bold text-amber-400 tracking-wider uppercase mb-2 block">Core Scientific Takeaway</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">Is Global Warming Creating More Hurricanes? No. It's Making Them Far More Dangerous.</h2>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          A common misconception is that rising planetary temperatures mean hundreds more hurricanes every year. Observational records from <strong>NOAA, NASA, and IBTrACS</strong> reveal the truth: global storm counts stay remarkably constant at ~85 per year. However, hotter ocean waters inject massive thermal energy, rapidly transforming ordinary storms into high-intensity <span class="text-rose-400 font-semibold">Category 4 and 5 mega-cyclones</span>.
+        </p>
+      </div>
+    </section>
+
+    <!-- Visual 1 & Visual 2: Fever & The Myth-Buster -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Visual 1: Earth's Rising Fever -->
+      <section class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 shadow-lg flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">Visual 1</span>
+            <span class="text-xs text-slate-400">NOAA / NASA GISTEMP</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1">Earth's Rising Fever (1999–2024)</h3>
+          <p class="text-xs text-slate-400 mb-4 leading-normal">
+            Global surface temperature anomaly relative to the 20th-century average. The steep trajectory shows accelerated global warming over the past 25 years.
+          </p>
+          <div class="chart-box">
+            <canvas id="feverChart"></canvas>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+          <span><i class="fa-solid fa-arrow-trend-up text-rose-400 mr-1.5"></i>2024 Anomaly: <strong>+1.28°C</strong></span>
+          <span class="text-slate-500">1999: +0.45°C</span>
+        </div>
+      </section>
+
+      <!-- Visual 2: The Deceptive Flatline -->
+      <section class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 shadow-lg flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Visual 2 (Myth-Buster)</span>
+            <span class="text-xs text-slate-400">IBTrACS Global Tropical Cyclones</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1">The Deceptive Flatline: Count vs. Temp</h3>
+          <p class="text-xs text-slate-400 mb-4 leading-normal">
+            Comparing annual global storm counts against rising global temperatures. Frequency does not spike—it hovers steadily around ~85 to 88 storms annually.
+          </p>
+          <div class="chart-box">
+            <canvas id="flatlineChart"></canvas>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+          <span><i class="fa-solid fa-circle-check text-cyan-400 mr-1.5"></i>Annual Average: <strong>~85.2 Storms/yr</strong></span>
+          <span class="text-slate-500">Stability despite +0.83°C warming</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Visual 3: The Monster Shift (Stacked 100% Bar Chart) -->
+    <section class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Visual 3</span>
+            <h3 class="text-lg font-bold text-white">The Monster Shift: Category Proportions</h3>
+          </div>
+          <p class="text-xs text-slate-400 max-w-2xl">
+            Proportion of tropical cyclones categorized by Saffir-Simpson intensity grouped in 5-year climatological windows. Note the steady expansion of destructive Category 4–5 storms relative to minor Category 1–2 systems.
+          </p>
+        </div>
+        <div class="flex items-center gap-4 text-xs">
+          <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-sky-500 inline-block"></span> Cat 1–2 (Moderate)</div>
+          <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-amber-500 inline-block"></span> Cat 3 (Major)</div>
+          <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-rose-600 inline-block"></span> Cat 4–5 (Catastrophic)</div>
+        </div>
+      </div>
+      <div class="chart-box" style="height: 320px;">
+        <canvas id="intensityChart"></canvas>
+      </div>
+      <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3 border-t border-slate-800 text-xs">
+        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800/80">
+          <span class="text-slate-400 block mb-0.5">1999–2003 Ratio (Cat 4–5)</span>
+          <span class="text-base font-bold text-slate-200">22.8%</span>
+        </div>
+        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800/80">
+          <span class="text-slate-400 block mb-0.5">2019–2024 Ratio (Cat 4–5)</span>
+          <span class="text-base font-bold text-rose-400">35.4% <i class="fa-solid fa-arrow-trend-up text-xs"></i></span>
+        </div>
+        <div class="bg-slate-950/50 p-3 rounded-lg border border-slate-800/80">
+          <span class="text-slate-400 block mb-0.5">Mechanism</span>
+          <span class="text-slate-300">Warm sea-surface temperatures act as high-octane rocket fuel.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual 4 & Geo Map Visual: The Power Surge & Geographical Hotspots -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Visual 4: The Power Surge (ACE & OHC) -->
+      <section class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 shadow-lg flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Visual 4</span>
+            <span class="text-xs text-slate-400">NOAA NCEI & Global ACE Index</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1">The Power Surge: ACE vs Ocean Heat</h3>
+          <p class="text-xs text-slate-400 mb-4 leading-normal">
+            Accumulated Cyclone Energy (ACE) index compared to Upper Ocean Heat Content (0–700m anomaly in $10^{22}$ Joules). Deep warm water fuels prolonged, high-intensity lifecycle kinetic energy.
+          </p>
+          <div class="chart-box">
+            <canvas id="aceChart"></canvas>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+          <span><i class="fa-solid fa-fire-flame-curved text-amber-400 mr-1.5"></i>Upper Ocean Heat Content: <strong>Record High</strong></span>
+          <span class="text-slate-400">Sustaining rapid intensification</span>
+        </div>
+      </section>
+
+      <!-- Geographical Map Visual: Global Cyclonic Hotspots & SST Anomaly -->
+      <section class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 shadow-lg flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Geographical Map Visual</span>
+            <span class="text-xs text-slate-400">NOAA IBTrACS Tracks & SST Anomaly</span>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-1">Geographic Genesis & Intensification Zones</h3>
+          <p class="text-xs text-slate-400 mb-3 leading-normal">
+            Interactive world map marking prime ocean warming basins, historically rapid-intensifying cyclones (Cat 5), and convective severe storm corridors (Tornado Alley). Click any marker or basin chip to inspect.
+          </p>
+          
+          <!-- Interactive Basin Quick Filter Chips -->
+          <div class="flex flex-wrap gap-2 mb-3 text-xs">
+            <button type="button" onclick="selectHotspot('atlantic')" id="btn-atlantic" class="basin-btn px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 border border-rose-500/40 transition">
+              <i class="fa-solid fa-hurricane mr-1"></i>Gulf & Atlantic
+            </button>
+            <button type="button" onclick="selectHotspot('pacific')" id="btn-pacific" class="basin-btn px-2.5 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/30 border border-indigo-500/40 transition">
+              <i class="fa-solid fa-wind mr-1"></i>Typhoon Alley
+            </button>
+            <button type="button" onclick="selectHotspot('otis')" id="btn-otis" class="basin-btn px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-300 hover:bg-pink-500/30 border border-pink-500/40 transition">
+              <i class="fa-solid fa-bolt mr-1"></i>Acapulco (Otis)
+            </button>
+            <button type="button" onclick="selectHotspot('tornado')" id="btn-tornado" class="basin-btn px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/40 transition">
+              <i class="fa-solid fa-tornado mr-1"></i>Tornado Alley
+            </button>
+            <button type="button" onclick="selectHotspot('bengal')" id="btn-bengal" class="basin-btn px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/40 transition">
+              <i class="fa-solid fa-water mr-1"></i>Bay of Bengal
+            </button>
+            <button type="button" onclick="resetMap()" id="btn-all" class="basin-btn px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition">
+              <i class="fa-solid fa-globe mr-1"></i>Global View
+            </button>
+          </div>
+
+          <!-- Self-Contained Vector Map (Guaranteed zero-failure rendering) -->
+          <div class="relative w-full rounded-xl bg-[#070b14] border border-slate-800 overflow-hidden shadow-inner" style="height: 420px;">
+            
+            <svg id="worldVectorMap" viewBox="0 0 1000 500" class="w-full h-full cursor-crosshair select-none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="oceanGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#0f172a" />
+                  <stop offset="100%" stop-color="#050811" />
+                </radialGradient>
+                <linearGradient id="sstHeatGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.35" />
+                  <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.1" />
+                </linearGradient>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <!-- Ocean Background & Grid -->
+              <rect width="1000" height="500" fill="url(#oceanGlow)"/>
+              
+              <!-- Latitude / Longitude Climatology Grids -->
+              <g stroke="#1e293b" stroke-width="0.8" stroke-dasharray="3 3">
+                <line x1="0" y1="250" x2="1000" y2="250" stroke="#334155" stroke-width="1.2" />
+                <line x1="0" y1="185" x2="1000" y2="185" />
+                <line x1="0" y1="315" x2="1000" y2="315" />
+                <line x1="250" y1="0" x2="250" y2="500" />
+                <line x1="500" y1="0" x2="500" y2="500" />
+                <line x1="750" y1="0" x2="750" y2="500" />
+              </g>
+
+              <text x="12" y="246" fill="#475569" font-size="9" font-family="monospace">0° EQUATOR</text>
+              <text x="12" y="181" fill="#475569" font-size="9" font-family="monospace">23.5°N TROPIC</text>
+
+              <!-- SST Thermal Fuel Pools (>28.5°C Superheated Water) -->
+              <path d="M 220 180 Q 280 160 340 190 Q 320 250 250 240 Z" fill="url(#sstHeatGradient)" stroke="#f43f5e" stroke-width="1" stroke-dasharray="4 2" opacity="0.8"/>
+              <path d="M 720 170 Q 860 160 880 250 Q 820 290 730 260 Z" fill="url(#sstHeatGradient)" stroke="#fb923c" stroke-width="1" stroke-dasharray="4 2" opacity="0.8"/>
+              <path d="M 640 190 Q 720 190 710 260 Q 640 270 630 220 Z" fill="url(#sstHeatGradient)" stroke="#f43f5e" stroke-width="1" stroke-dasharray="4 2" opacity="0.6"/>
+
+              <!-- World Continents (Stylized Vector Silhouettes) -->
+              <g fill="#1e293b" stroke="#334155" stroke-width="1" opacity="0.95">
+                <path d="M 110 80 L 160 70 L 220 75 L 260 95 L 290 120 L 260 160 L 230 170 L 210 220 L 195 240 L 175 230 L 165 200 L 135 170 L 105 130 Z" />
+                <path d="M 320 40 L 370 45 L 360 80 L 330 85 Z" />
+                <path d="M 220 250 L 260 255 L 310 290 L 320 340 L 280 420 L 250 430 L 230 360 L 210 290 Z" />
+                <path d="M 460 90 L 530 85 L 550 120 L 510 145 L 460 140 L 440 120 Z" />
+                <path d="M 460 160 L 540 160 L 570 210 L 540 310 L 500 360 L 470 330 L 440 220 Z" />
+                <path d="M 540 85 L 750 70 L 850 100 L 860 160 L 820 200 L 760 210 L 730 245 L 680 230 L 660 190 L 580 150 Z" />
+                <path d="M 780 320 L 870 315 L 880 375 L 820 400 L 770 370 Z" />
+                <circle cx="835" cy="165" r="5" fill="#334155" />
+                <circle cx="820" cy="180" r="4" fill="#334155" />
+                <path d="M 760 260 L 790 265 L 775 275 Z" />
+                <path d="M 795 270 L 830 275 L 810 285 Z" />
+              </g>
+
+              <!-- Historical Category 5 Cyclone Tracks -->
+              <path id="track-atlantic" d="M 215 220 Q 235 212 255 198 T 275 190" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-dasharray="4 2" opacity="0.75" />
+              <path id="track-pacific" d="M 860 235 Q 815 220 780 210 T 745 195" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-dasharray="4 2" opacity="0.75" />
+              <path id="track-otis" d="M 195 242 Q 198 232 201 224" fill="none" stroke="#ec4899" stroke-width="3" opacity="0.8" />
+
+              <!-- Interactive Pins -->
+              <!-- 1. Gulf / Atlantic -->
+              <g class="map-hotspot cursor-pointer" onclick="selectHotspot('atlantic')" transform="translate(255, 195)">
+                <circle r="14" fill="#f43f5e" opacity="0.2" class="animate-ping" />
+                <circle r="8" fill="#f43f5e" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+                <text x="12" y="4" fill="#fda4af" font-size="11" font-weight="700">Atlantic / Milton</text>
+              </g>
+
+              <!-- 2. Acapulco (Otis) -->
+              <g class="map-hotspot cursor-pointer" onclick="selectHotspot('otis')" transform="translate(198, 226)">
+                <circle r="14" fill="#ec4899" opacity="0.2" class="animate-ping" />
+                <circle r="7" fill="#ec4899" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+                <text x="-95" y="18" fill="#f472b6" font-size="11" font-weight="700">Otis (Acapulco)</text>
+              </g>
+
+              <!-- 3. Typhoon Alley -->
+              <g class="map-hotspot cursor-pointer" onclick="selectHotspot('pacific')" transform="translate(805, 205)">
+                <circle r="16" fill="#f43f5e" opacity="0.2" class="animate-ping" />
+                <circle r="8" fill="#f43f5e" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+                <text x="-120" y="4" fill="#fda4af" font-size="11" font-weight="700">Typhoon Alley</text>
+              </g>
+
+              <!-- 4. Tornado Alley -->
+              <g class="map-hotspot cursor-pointer" onclick="selectHotspot('tornado')" transform="translate(205, 160)">
+                <circle r="12" fill="#f59e0b" opacity="0.2" class="animate-ping" />
+                <circle r="7" fill="#f59e0b" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+                <text x="12" y="4" fill="#fcd34d" font-size="11" font-weight="700">Tornado Alley</text>
+              </g>
+
+              <!-- 5. Bay of Bengal -->
+              <g class="map-hotspot cursor-pointer" onclick="selectHotspot('bengal')" transform="translate(685, 215)">
+                <circle r="12" fill="#10b981" opacity="0.2" class="animate-ping" />
+                <circle r="7" fill="#10b981" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+                <text x="12" y="4" fill="#6ee7b7" font-size="11" font-weight="700">Bay of Bengal</text>
+              </g>
+            </svg>
+
+            <!-- Dynamic Bottom Detail Card Inside Map -->
+            <div id="hotspotCard" class="absolute bottom-3 inset-x-3 bg-slate-900/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-700/80 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-300">
+              <div class="flex items-start gap-3">
+                <div id="cardBadge" class="w-9 h-9 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-base shrink-0 mt-0.5">
+                  <i class="fa-solid fa-hurricane"></i>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span id="cardCategory" class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20">Category 5 Corridor</span>
+                    <span id="cardMetric" class="text-xs font-semibold text-amber-400">SST Anomaly: +2.1°C</span>
+                  </div>
+                  <h4 id="cardTitle" class="text-sm font-bold text-white mt-0.5">Western Atlantic Basin (Hurricane Milton & Dorian)</h4>
+                  <p id="cardDesc" class="text-xs text-slate-300 mt-0.5 leading-snug">
+                    Record ocean heat content in the Gulf & Atlantic fueled Milton's explosive drop to 897 mb (180 mph) and Dorian's stalled 185 mph eyewall.
+                  </p>
+                </div>
+              </div>
+              <div class="shrink-0 text-right hidden sm:block">
+                <span class="text-[11px] text-slate-400 block">Genesis Fuel:</span>
+                <span id="cardFuel" class="text-xs font-bold text-rose-400">Deep Mixed Layer >29°C</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-800 text-xs text-slate-300 flex items-center justify-between">
+          <span><i class="fa-solid fa-fire text-rose-500 mr-1.5"></i>Critical SST Threshold: <strong>>26.5°C (80°F)</strong></span>
+          <span class="text-slate-400">Self-Contained Vector GIS Layer</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Visual 5: The Ground Impact (Rainfall, Surge & Before/After Comparison) -->
+    <section class="bg-slate-900/90 rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-lg">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold px-2.5 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">Visual 5</span>
+        <span class="text-xs text-slate-400">Clausius-Clapeyron Atmospheric Physics & Field Evidence</span>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">The Ground Impact: Extreme Deluges & Coastal Surge</h3>
+      <p class="text-xs sm:text-sm text-slate-300 mb-6 max-w-4xl leading-relaxed">
+        For every 1°C increase in global atmospheric temperature, air can hold roughly <strong>7% more moisture</strong> (the Clausius-Clapeyron relation). Combined with elevated sea levels, modern tropical cyclones dump unprecedented freshwater volumes and drive deeper storm surges inland.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        
+        <!-- Left: Extreme Precipitation & Surge Metrics -->
+        <div class="space-y-4">
+          <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span>Atmospheric Water-Vapor Capacity</span>
+              <span class="text-rose-400 font-bold">+7% per 1°C Warming</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+              <div class="bg-rose-500 h-full rounded-full" style="width: 85%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2">
+              Warm storms dump hyper-concentrated rainfall over land (e.g., Hurricane Harvey: 60+ inches; Hurricane Helene: record Appalachian inland flash flooding).
+            </p>
+          </div>
+
+          <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span>Sea Level Baseline & Peak Surge Heights</span>
+              <span class="text-sky-400 font-bold">+20 to 30 cm baseline rise</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+              <div class="bg-sky-400 h-full rounded-full" style="width: 78%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2">
+              Higher global baseline sea level lets storm surges breach coastal defenses and travel miles further inland into freshwater ecosystems.
+            </p>
+          </div>
+
+          <div class="bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+              <span>Severe Convective Storms & Tornado Clusters</span>
+              <span class="text-amber-400 font-bold">Higher CAPE / Instability</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+              <div class="bg-amber-400 h-full rounded-full" style="width: 70%"></div>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2">
+              Increasing Convective Available Potential Energy (CAPE) fuels more frequent high-density tornado outbreaks and severe hail storms across the central and southeastern US.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Before-and-After Impact Showcase -->
+        <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-camera-retro text-rose-400"></i> Coastal Inundation Evidence
+            </h4>
+            <span class="text-[11px] text-slate-400">Fort Myers Beach / Gulf Surge</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="group relative rounded-lg overflow-hidden border border-slate-800">
+              <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Coastline Before Storm" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300">
+              <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-2 py-1 text-center">
+                <span class="text-[11px] font-semibold text-emerald-400">Normal Conditions (Pre-Storm)</span>
+              </div>
+            </div>
+            <div class="group relative rounded-lg overflow-hidden border border-slate-800">
+              <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80" alt="Catastrophic Flooding Damage" class="w-full h-44 object-cover group-hover:scale-105 transition-transform duration-300">
+              <div class="absolute bottom-0 inset-x-0 bg-slate-950/80 px-2 py-1 text-center">
+                <span class="text-[11px] font-semibold text-rose-400">15-Foot Storm Surge Damage</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 italic text-center">
+            Figure: Category 4 and 5 landfalls produce catastrophic storm surges capable of scouring coastlines and shifting entire barrier islands.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- High School Earth Science Lab Summary / Class Discussion Guide -->
+    <section class="bg-gradient-to-r from-indigo-950/40 via-slate-900 to-slate-900 p-6 rounded-2xl border border-indigo-900/40">
+      <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-graduation-cap text-indigo-400"></i>
+        Earth Science Classroom Inquiry & Discussion Questions
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-300">
+        <div class="bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+          <strong class="text-indigo-300 block mb-1">1. Frequency vs Intensity</strong>
+          Why does atmospheric stabilization prevent total storm count from exploding, while sea surface heat fuels greater peak intensities?
+        </div>
+        <div class="bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+          <strong class="text-indigo-300 block mb-1">2. Rapid Intensification</strong>
+          How does high ocean heat content allow a storm like Otis (2023) or Milton (2024) to jump from Cat 1 to Cat 5 in under 24 hours?
+        </div>
+        <div class="bg-slate-950/60 p-3.5 rounded-lg border border-slate-800">
+          <strong class="text-indigo-300 block mb-1">3. Convective Outbreaks</strong>
+          How do warmer Gulf moisture plumes interact with spring jet stream patterns to produce severe convective tornado swarms?
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-500">
+    <p>Data Sources: NASA Goddard Institute for Space Studies (GISTEMP v4), NOAA National Centers for Environmental Information (NCEI), IBTrACS v04, and National Hurricane Center.</p>
+    <p class="mt-1">Prepared for Earth Science Education & GitHub Pages Deployment.</p>
+  </footer>
+
+  <!-- JavaScript for Chart.js & Vector Map -->
+  <script>
+    // 25-Year Historical Dataset (1999–2024)
+    const years = [
+      '1999', '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
+      '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018',
+      '2019', '2020', '2021', '2022', '2023', '2024'
+    ];
+
+    const tempAnomalies = [
+      0.45, 0.42, 0.54, 0.63, 0.62, 0.55, 0.69, 0.64, 0.67, 0.54,
+      0.66, 0.73, 0.61, 0.65, 0.68, 0.75, 0.90, 1.02, 0.93, 0.85,
+      0.98, 1.02, 0.85, 0.89, 1.18, 1.28
+    ];
+
+    const stormCounts = [
+      88, 83, 85, 87, 86, 84, 91, 82, 86, 84,
+      83, 85, 81, 84, 88, 82, 90, 84, 87, 88,
+      86, 89, 81, 85, 86, 84
+    ];
+
+    const aceIndex = [
+      670, 610, 680, 720, 740, 890, 930, 640, 630, 690,
+      620, 660, 600, 640, 620, 710, 910, 860, 880, 940,
+      870, 905, 780, 820, 955, 990
+    ];
+
+    const oceanHeatContent = [
+      4.2, 4.8, 5.5, 6.1, 6.9, 7.4, 8.2, 8.9, 9.8, 10.4,
+      11.1, 12.0, 12.8, 13.7, 14.9, 16.2, 17.8, 19.4, 20.9, 22.4,
+      24.1, 25.8, 27.2, 28.9, 31.4, 33.6
+    ];
+
+    // Chart 1: Earth's Rising Fever
+    const ctxFever = document.getElementById('feverChart').getContext('2d');
+    const feverGradient = ctxFever.createLinearGradient(0, 0, 0, 300);
+    feverGradient.addColorStop(0, 'rgba(239, 68, 68, 0.85)');
+    feverGradient.addColorStop(0.5, 'rgba(245, 158, 11, 0.5)');
+    feverGradient.addColorStop(1, 'rgba(59, 130, 246, 0.05)');
+
+    new Chart(ctxFever, {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: [{
+          label: 'Global Temp Anomaly (°C)',
+          data: tempAnomalies,
+          borderColor: '#f43f5e',
+          borderWidth: 3,
+          backgroundColor: feverGradient,
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#fb7185',
+          pointRadius: 3,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (context) => `Anomaly: +${context.raw}°C`
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8', font: { size: 10 } }
+          },
+          y: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => `+${v}°C` }
+          }
+        }
+      }
+    });
+
+    // Chart 2: The Deceptive Flatline
+    const ctxFlatline = document.getElementById('flatlineChart').getContext('2d');
+    new Chart(ctxFlatline, {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: [
+          {
+            label: 'Total Storm Count',
+            data: stormCounts,
+            borderColor: '#38bdf8',
+            backgroundColor: '#38bdf8',
+            borderWidth: 2.5,
+            tension: 0.2,
+            yAxisID: 'yCount',
+            pointRadius: 2.5
+          },
+          {
+            label: 'Temp Anomaly (°C)',
+            data: tempAnomalies,
+            borderColor: '#f97316',
+            backgroundColor: '#f97316',
+            borderWidth: 2.5,
+            borderDash: [5, 5],
+            tension: 0.3,
+            yAxisID: 'yTemp',
+            pointRadius: 0
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: '#cbd5e1', font: { size: 11 }, boxWidth: 12 }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8', font: { size: 10 } }
+          },
+          yCount: {
+            type: 'linear',
+            position: 'left',
+            min: 50,
+            max: 120,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#38bdf8', font: { size: 10 } },
+            title: { display: true, text: 'Storm Count (IBTrACS)', color: '#38bdf8', font: { size: 10 } }
+          },
+          yTemp: {
+            type: 'linear',
+            position: 'right',
+            min: 0,
+            max: 1.5,
+            grid: { drawOnChartArea: false },
+            ticks: { color: '#f97316', font: { size: 10 }, callback: v => `+${v}°C` },
+            title: { display: true, text: 'Temp Anomaly (°C)', color: '#f97316', font: { size: 10 } }
+          }
+        }
+      }
+    });
+
+    // Chart 3: The Monster Shift
+    const ctxIntensity = document.getElementById('intensityChart').getContext('2d');
+    new Chart(ctxIntensity, {
+      type: 'bar',
+      data: {
+        labels: ['1999–2003', '2004–2008', '2009–2013', '2014–2018', '2019–2024'],
+        datasets: [
+          {
+            label: 'Cat 1–2 (Moderate)',
+            data: [56.2, 53.0, 51.5, 47.3, 44.2],
+            backgroundColor: '#0284c7'
+          },
+          {
+            label: 'Cat 3 (Major)',
+            data: [21.0, 21.8, 21.5, 21.2, 20.4],
+            backgroundColor: '#f59e0b'
+          },
+          {
+            label: 'Cat 4–5 (Catastrophic)',
+            data: [22.8, 25.2, 27.0, 31.5, 35.4],
+            backgroundColor: '#e11d48'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (context) => `${context.dataset.label}: ${context.raw}%`
+            }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#cbd5e1', font: { size: 11 } }
+          },
+          y: {
+            stacked: true,
+            max: 100,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8', callback: v => `${v}%` }
+          }
+        }
+      }
+    });
+
+    // Chart 4: The Power Surge
+    const ctxAce = document.getElementById('aceChart').getContext('2d');
+    new Chart(ctxAce, {
+      type: 'line',
+      data: {
+        labels: years,
+        datasets: [
+          {
+            label: 'Ocean Heat Content (0-700m, 10²² J)',
+            data: oceanHeatContent,
+            borderColor: '#fbbf24',
+            backgroundColor: '#fbbf24',
+            borderWidth: 3,
+            tension: 0.3,
+            yAxisID: 'yOHC',
+            pointRadius: 0
+          },
+          {
+            label: 'Accumulated Cyclone Energy (ACE)',
+            data: aceIndex,
+            borderColor: '#10b981',
+            backgroundColor: '#10b981',
+            borderWidth: 2,
+            tension: 0.2,
+            yAxisID: 'yACE',
+            pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: { color: '#cbd5e1', font: { size: 10 }, boxWidth: 12 }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#94a3b8', font: { size: 10 } }
+          },
+          yACE: {
+            type: 'linear',
+            position: 'left',
+            min: 500,
+            max: 1100,
+            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+            ticks: { color: '#10b981', font: { size: 10 } },
+            title: { display: true, text: 'ACE Index', color: '#10b981', font: { size: 10 } }
+          },
+          yOHC: {
+            type: 'linear',
+            position: 'right',
+            min: 0,
+            max: 40,
+            grid: { drawOnChartArea: false },
+            ticks: { color: '#fbbf24', font: { size: 10 } },
+            title: { display: true, text: 'OHC (10²² Joules)', color: '#fbbf24', font: { size: 10 } }
+          }
+        }
+      }
+    });
+
+    // --- Interactive Vector Map Data & Controller ---
+    const hotspotData = {
+      atlantic: {
+        title: "Western Atlantic & Gulf Basin (Hurricanes Milton & Dorian)",
+        category: "Cat 5 Rapid Intensification Zone",
+        metric: "SST Anomaly: +2.1°C (Record High)",
+        fuel: "Deep Mixed Layer >29.5°C",
+        badgeIcon: "fa-hurricane",
+        desc: "Superheated waters fueled Hurricane Milton (2024: 180 mph, central pressure 897 mb) and Dorian (2019: 185 mph). Deep ocean heat content prevents upwelling of cooler water from weakening the eye."
+      },
+      pacific: {
+        title: "Western North Pacific Basin (Typhoon Alley)",
+        category: "Most Energetic Marine Basin",
+        metric: "Peak ACE Generator Globally",
+        fuel: "Warm Layer Depth >100m",
+        badgeIcon: "fa-wind",
+        desc: "Generates over one-third of global cyclone energy. Hosts immense Category 5 super typhoons (Haiyan, Surigae, Goni) driven by the massive Indo-Pacific Warm Pool."
+      },
+      otis: {
+        title: "Eastern Pacific / Acapulco (Hurricane Otis 2023)",
+        category: "Fastest Intensification on Record",
+        metric: "+115 mph in 24 Hours",
+        fuel: "Marine Heatwave Spike",
+        badgeIcon: "fa-bolt",
+        desc: "Otis shattered all forecast models, exploding from a modest 50 mph tropical storm into a 165 mph Category 5 monster in just 12 hours right before slamming into Acapulco."
+      },
+      tornado: {
+        title: "US Central Plains / Gulf Inflow Corridor",
+        category: "Severe Convective Storms",
+        metric: "Elevated CAPE & Moisture Influx",
+        fuel: "Warm Moist Gulf Air Plumes",
+        badgeIcon: "fa-tornado",
+        desc: "Warmer sea-surface temperatures in the Gulf pump excessive water vapor northward, colliding with jet stream wind shear to fuel violent, multi-tornado supercell clusters."
+      },
+      bengal: {
+        title: "Bay of Bengal Intensification Corridor",
+        category: "High Vulnerability Lowland Basin",
+        metric: "Shallow Bathymetry & Surges",
+        fuel: "SST Consistently >29°C",
+        badgeIcon: "fa-water",
+        desc: "Warm shallow waters and funnel-shaped coastal geography allow rapid post-monsoon cyclone development, driving deadly surges into dense coastal lowlands in India and Bangladesh."
+      }
+    };
+
+    function selectHotspot(key) {
+      const data = hotspotData[key];
+      if (!data) return;
+
+      document.getElementById('cardTitle').textContent = data.title;
+      document.getElementById('cardCategory').textContent = data.category;
+      document.getElementById('cardMetric').textContent = data.metric;
+      document.getElementById('cardDesc').textContent = data.desc;
+      document.getElementById('cardFuel').textContent = data.fuel;
+
+      const badge = document.getElementById('cardBadge');
+      badge.innerHTML = `<i class="fa-solid ${data.badgeIcon}"></i>`;
+      
+      document.querySelectorAll('.basin-btn').forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-white', 'scale-105');
+      });
+      const activeBtn = document.getElementById(`btn-${key}`);
+      if (activeBtn) {
+        activeBtn.classList.add('ring-2', 'ring-white', 'scale-105');
+      }
+    }
+
+    function resetMap() {
+      document.querySelectorAll('.basin-btn').forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-white', 'scale-105');
+      });
+      document.getElementById('btn-all').classList.add('ring-2', 'ring-white');
+      document.getElementById('cardTitle').textContent = "Global Cyclone Basins & Sea Surface Heating Zones";
+      document.getElementById('cardCategory').textContent = "Global Climatology";
+      document.getElementById('cardMetric').textContent = "Global Average: ~85 storms/yr";
+      document.getElementById('cardDesc').textContent = "Select any hotspot pin on the map or click a basin filter button above to inspect real-world thermodynamic drivers and Category 5 rapid intensification events.";
+      document.getElementById('cardFuel').textContent = "Threshold: SST >26.5°C";
+      document.getElementById('cardBadge').innerHTML = '<i class="fa-solid fa-globe"></i>';
+    }
+  </script>
+</body>
+</html>
+
